@@ -1,0 +1,9 @@
+# Ignorar el entorno virtual
+venv/
+__pycache__/
+
+# Ignorar variables de entorno (secretos)
+.env
+
+# Ignorar archivos de sistema
+.DS_Store
