@@ -1,0 +1,124 @@
+==============================================================================
+GUÍA DE INSTALACIÓN Y EJECUCIÓN DEL PROYECTO (API GESTIÓN MÉDICA)
+==============================================================================
+------------------------------------------------------------------------------
+1. PRERREQUISITOS (Lo que debes instalar primero)
+------------------------------------------------------------------------------
+Antes de bajar el código, asegúrate de tener instalado:
+
+1. Python (versión 3.10 o superior):
+   - Verifica en tu terminal escribiendo: python --version
+
+2. Git:
+   - Para clonar el repositorio.
+
+3. PostgreSQL (Motor de Base de Datos):
+   - Descárgalo aquí: https://www.postgresql.org/download/windows/
+   - Durante la instalación, te pedirá crear una contraseña para el usuario "postgres".
+   - ¡ANOTA ESA CONTRASEÑA! La necesitarás en el paso 5.
+   - Instala también "pgAdmin 4" (generalmente viene con el instalador).
+ Luego de la instalacion te dira que si quieres instalar otra cosa, ignora esa otra cosa, solo necesitamos PostgresSQL y pgAdmin 4
+------------------------------------------------------------------------------
+2. CLONAR EL REPOSITORIO
+------------------------------------------------------------------------------
+Abre una terminal en la carpeta donde guardas tus proyectos y ejecuta:
+
+   git clone https://github.com/elujs/lab1-proyecto-2025-30324770-30405569.git
+   cd lab1-proyecto-2025-30324770-30405569
+
+------------------------------------------------------------------------------
+3. CONFIGURAR LA BASE DE DATOS
+------------------------------------------------------------------------------
+Python puede crear las tablas, pero no puede crear la base de datos vacía.
+Debes hacerlo tú manualmente una sola vez:
+
+1. Abre pgAdmin 4.
+2. Conéctate al servidor (te pedirá la contraseña que creaste al instalar).
+3. Haz clic derecho en "Databases" -> "Create" -> "Database...".
+4. En el nombre escribe EXACTAMENTE: lab1_db
+5. Dale a "Save".
+
+------------------------------------------------------------------------------
+4. CREAR Y ACTIVAR EL ENTORNO VIRTUAL
+------------------------------------------------------------------------------
+(esto es basicamente para instalar todas las librerias solamente en este proyecto y no en toda la pc)
+Esto es vital para no mezclar librerías con otros proyectos.
+
+1. Abre la carpeta del proyecto en Visual Studio Code.
+2. Abre la terminal de VS Code (Ctrl + ñ).
+3. Crea el entorno virtual ejecutando:
+   python -m venv venv
+
+4. Activa el entorno:
+   - En Windows (PowerShell):  .\venv\Scripts\activate
+   - En Mac/Linux:             source venv/bin/activate
+
+   * DEBES VER UN (venv) VERDE AL INICIO DE LA LÍNEA DE LA TERMINAL. *
+
+   !!! ERROR COMÚN EN WINDOWS !!!
+   Si al intentar activar te sale un error rojo que dice "la ejecución de scripts está deshabilitada",
+   es una protección de Windows. Soluciónalo ejecutando este comando y escribiendo 'S' o 'Y':
+
+   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+   Luego intenta activar el entorno de nuevo.
+
+------------------------------------------------------------------------------
+5. INSTALAR LAS LIBRERÍAS (DEPENDENCIAS)
+------------------------------------------------------------------------------
+Con el entorno (venv) activado, instalaremos todas las herramientas exactas que
+usa el proyecto (FastAPI, SQLAlchemy, Drivers de BD, etc.) con un solo comando:
+
+   pip install -r requirements.txt
+
+------------------------------------------------------------------------------
+6. CONFIGURAR LAS VARIABLES DE ENTORNO (.env)
+------------------------------------------------------------------------------
+Por seguridad, las contraseñas no se suben a GitHub. Debes crear tu propio archivo de secretos.
+
+1. Crea un archivo nuevo en la raíz del proyecto llamado: .env
+2. Pega el siguiente contenido dentro:
+
+DATABASE_URL=postgresql://postgres:TU_CONTRASEÑA_AQUI@localhost:5432/lab1_db
+SECRET_KEY=supersecreto123
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+3. CAMBIA "TU_CONTRASEÑA_AQUI" por la contraseña que le pusiste a PostgreSQL en el paso 1.
+
+------------------------------------------------------------------------------
+7. EJECUTAR EL SERVIDOR
+------------------------------------------------------------------------------
+¡Hora de la verdad! Con el entorno activado, ejecuta:
+
+   uvicorn app.main:app --reload
+
+Si todo sale bien, verás un mensaje que dice: "Application startup complete".
+Esto significa que la API está viva y conectada a tu base de datos.
+
+------------------------------------------------------------------------------
+8. CÓMO USAR LA API (DOCUMENTACIÓN)
+------------------------------------------------------------------------------
+FastAPI genera una página web automática para probar los endpoints.
+
+1. Abre tu navegador.
+2. Entra a: http://127.0.0.1:8000/docs
+
+Ahí verás los botones verdes y azules para interactuar con la base de datos
+(Crear usuarios, ver pacientes, etc.).
+
+------------------------------------------------------------------------------
+SOLUCIÓN DE PROBLEMAS FRECUENTES
+------------------------------------------------------------------------------
+
+A) Error "ModuleNotFoundError: No module named 'app'":
+   Causa: Estás intentando correr el archivo con el botón "Play" de VS Code.
+   Solución: No uses el botón Play. Usa siempre el comando `uvicorn app.main:app --reload` en la terminal.
+
+B) Error "authentication failed" o conexión rechazada:
+   Causa: La contraseña en el archivo .env es incorrecta.
+   Solución: Verifica tu contraseña de PostgreSQL e intenta conectarte con pgAdmin para asegurarte de que es la correcta.
+
+C) Error con "bcrypt" o "passlib":
+   Causa: Conflicto de versiones.
+   Solución: Ejecuta `pip install bcrypt==4.0.1` y reinicia el servidor. (Aunque esto ya debería estar arreglado en el requirements.txt).
