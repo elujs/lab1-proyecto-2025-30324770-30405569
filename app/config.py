@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    # Estas variables deben coincidir con las del archivo .env
+   
     database_url: str
     secret_key: str
     algorithm: str
@@ -10,5 +10,4 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 
-# Instanciamos la configuración para usarla en cualquier parte
 settings = Settings()

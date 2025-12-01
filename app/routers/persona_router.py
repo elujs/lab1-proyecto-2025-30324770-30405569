@@ -7,7 +7,7 @@ from typing import List
 
 router = APIRouter()
 
-# 1. POST /personas: Crea una nueva persona (Paciente)
+# 1. POST /personas: Crea una nueva persona 
 @router.post("/personas", response_model=PersonaResponse, status_code=status.HTTP_201_CREATED)
 def create_persona(persona: PersonaCreate, db: Session = Depends(get_db)):
     # Lógica 1: Buscar si el documento ya existe (Validación de Unicidad)

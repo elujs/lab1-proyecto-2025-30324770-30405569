@@ -12,7 +12,7 @@ class Usuario(Base):
     password_hash = Column(String, nullable=False)
     
     estado = Column(String, default="activo") 
-    # Roles permitidos según req. 6: administracion, profesional, cajero, auditor
+    # Roles permitidos: administracion, profesional, cajero, auditor
     rol = Column(String, default="profesional") 
-        # func.now() hace que la base de datos ponga la hora exacta automáticamente
+        # func.now() para que en la base de datos ponga la hora exacta automáticamente
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())

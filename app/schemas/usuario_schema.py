@@ -8,7 +8,7 @@ class UsuarioRol(str, Enum):
     CAJERO = "cajero"
     AUDITOR = "auditor"
 
-# Clase base con campos comunes
+
 class UsuarioBase(BaseModel):
     username: str
     email: EmailStr
@@ -16,16 +16,16 @@ class UsuarioBase(BaseModel):
 
 
     
-# Schema para CREAR (lo que recibimos en el POST)
+
 class UsuarioCreate(UsuarioBase):
     password: str # La contraseña es obligatoria al crear, pero no la devolvemos al leer
 
-# Schema para RESPONDER (lo que devolvemos al cliente)
+
 class UsuarioResponse(UsuarioBase):
     id: str
     estado: str
     fecha_creacion: datetime
 
     class Config:
-        # Esto permite a Pydantic leer datos directamente de un objeto SQLAlchemy (ORM)
+        
         from_attributes = True

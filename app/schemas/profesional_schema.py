@@ -8,13 +8,13 @@ class ProfesionalCategoria(str, Enum):
     ENFERMERIA = "enfermeria"
     TERAPIAS = "terapias"
 class ProfesionalBase(BaseModel):
-    # Campos obligatorios en la creación (basado en RF 2.1)
+    
     nombres: str
     apellidos: str
     registro_profesional: str
     especialidad: str
     categoria: ProfesionalCategoria
-    # Campos opcionales en la creación
+    
     correo: Optional[EmailStr] = None
     telefono: Optional[str] = None
     agenda_habilitada: Optional[bool] = True

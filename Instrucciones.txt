@@ -84,7 +84,7 @@ SECRET_KEY=supersecreto123
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-3. CAMBIA "TU_CONTRASEÑA_AQUI" por la contraseña que le pusiste a PostgreSQL en el paso 1.
+3. CAMBIA "124040" por la contraseña que le pusiste a PostgreSQL en el paso 1.
 
 ------------------------------------------------------------------------------
 7. EJECUTAR EL SERVIDOR

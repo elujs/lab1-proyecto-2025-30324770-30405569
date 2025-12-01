@@ -8,11 +8,11 @@ class UnidadTipo(str, Enum):
     CONSULTORIO = "consultorio"
     SERVICIO = "servicio"
 class UnidadBase(BaseModel):
-    # Campos obligatorios en la creación (basado en RF 2.1)
+    
     nombre: str
     tipo: UnidadTipo
     
-    # Campos opcionales en la creación
+    
     direccion: Optional[str] = None
     telefono: Optional[str] = None
     horario_referencia: Optional[str] = None
@@ -21,7 +21,7 @@ class UnidadCreate(UnidadBase):
     pass
 
 class UnidadUpdate(BaseModel):
-    # Campos que se permiten actualizar (todos opcionales para PATCH)
+   
     nombre: Optional[str] = None
     tipo: Optional[str] = None
     direccion: Optional[str] = None
