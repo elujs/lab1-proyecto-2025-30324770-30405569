@@ -1,13 +1,21 @@
+from enum import Enum
 from pydantic import BaseModel, EmailStr
-from typing import Optional
 from datetime import datetime
+
+class UsuarioRol(str, Enum):
+    ADMINISTRACION = "administracion"
+    PROFESIONAL = "profesional"
+    CAJERO = "cajero"
+    AUDITOR = "auditor"
 
 # Clase base con campos comunes
 class UsuarioBase(BaseModel):
     username: str
     email: EmailStr
-    rol: str = "profesional" # Valor por defecto si no lo envían
+    rol: UsuarioRol = UsuarioRol.PROFESIONAL
 
+
+    
 # Schema para CREAR (lo que recibimos en el POST)
 class UsuarioCreate(UsuarioBase):
     password: str # La contraseña es obligatoria al crear, pero no la devolvemos al leer
