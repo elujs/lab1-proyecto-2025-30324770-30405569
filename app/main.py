@@ -41,5 +41,11 @@ app.include_router(cita_router.router, tags=["Citas"])
 app.include_router(episodio_router.router, tags=["Episodios", "Clínico"])
 app.include_router(clinico_router.router, tags=["Clínico"]) 
 @app.get("/")
+
 def read_root():
+
     return {"mensaje": "¡La API está funcionando y conectada a la BD!"}
+
+@app.get("/health", tags=["Observabilidad"])
+def health_check():
+    return {"status": "ok", "service": "api-gestion-medica"}
