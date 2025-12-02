@@ -7,9 +7,7 @@ from typing import List
 
 router = APIRouter()
 
-# -----------------------------------------------------------------
 # 1. POST /profesionales: Crea un nuevo profesional
-# -----------------------------------------------------------------
 @router.post("/profesionales", response_model=ProfesionalResponse, status_code=status.HTTP_201_CREATED)
 def create_profesional(profesional: ProfesionalCreate, db: Session = Depends(get_db)):
     # 1. Validación de Unicidad: registro_profesional debe ser único
@@ -33,9 +31,7 @@ def create_profesional(profesional: ProfesionalCreate, db: Session = Depends(get
 
     return nuevo_profesional
 
-# -----------------------------------------------------------------
 # 2. GET /profesionales/{id}: Obtiene por ID
-# -----------------------------------------------------------------
 @router.get("/profesionales/{profesional_id}", response_model=ProfesionalResponse)
 def get_profesional(profesional_id: str, db: Session = Depends(get_db)):
     profesional = db.query(Profesional).filter(Profesional.id == profesional_id).first()
@@ -48,17 +44,15 @@ def get_profesional(profesional_id: str, db: Session = Depends(get_db)):
     
     return profesional
 
-# -----------------------------------------------------------------
+
 # 3. GET /profesionales: Obtiene lista
-# -----------------------------------------------------------------
+
 @router.get("/profesionales", response_model=List[ProfesionalResponse])
 def list_profesionales(db: Session = Depends(get_db)):
     profesionales = db.query(Profesional).all()
     return profesionales
 
-# -----------------------------------------------------------------
 # 4. PATCH /profesionales/{id}: Actualiza datos (parcialmente)
-# -----------------------------------------------------------------
 @router.patch("/profesionales/{profesional_id}", response_model=ProfesionalResponse)
 def update_profesional(profesional_id: str, updates: ProfesionalUpdate, db: Session = Depends(get_db)):
     profesional = db.query(Profesional).filter(Profesional.id == profesional_id).first()
@@ -80,9 +74,7 @@ def update_profesional(profesional_id: str, updates: ProfesionalUpdate, db: Sess
     
     return profesional
 
-# -----------------------------------------------------------------
 # 5. DELETE /profesionales/{id}: Eliminación Lógica
-# -----------------------------------------------------------------
 @router.delete("/profesionales/{profesional_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_profesional(profesional_id: str, db: Session = Depends(get_db)):
     profesional = db.query(Profesional).filter(Profesional.id == profesional_id).first()
