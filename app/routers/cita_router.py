@@ -19,6 +19,7 @@ router = APIRouter()
 )
 def create_cita(cita: CitaCreate, db: Session = Depends(get_db)):
     # Validar agenda (Regla de Negocio: Agenda abierta y fechas coincidentes)
+    #faltan validaciones. 
     agenda = db.query(Agenda).filter(
         Agenda.profesional_id == cita.profesional_id,
         Agenda.unidad_id == cita.unidad_id,
