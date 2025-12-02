@@ -1,4 +1,3 @@
-# seed.py
 from app.database import SessionLocal, engine, Base
 from app.models.usuario import Usuario
 from app.models.persona import PersonaAtendida
@@ -29,6 +28,17 @@ def seed_db():
         db.add(admin)
         print("✅ Usuario Admin creado")
 
+    if not db.query(Usuario).filter(Usuario.username == "medico").first():
+        medico_user = Usuario(
+            username="medico", 
+            email="medico@hospital.com", 
+            password_hash=pwd_context.hash("medico123"), 
+            rol="profesional" # Rol limitado (no es admin)
+        )
+        db.add(medico_user)
+        db.commit()
+        print("✅ Usuario Médico creado (user: medico / pass: medico123)")
+
     # 2. UNIDAD DE ATENCIÓN
     unidad = db.query(UnidadAtencion).first()
     if not unidad:
@@ -39,7 +49,7 @@ def seed_db():
             horario_referencia="8:00 - 17:00"
         )
         db.add(unidad)
-        db.commit() # Commit para obtener el ID
+        db.commit() 
         db.refresh(unidad)
         print("✅ Unidad creada")
 
