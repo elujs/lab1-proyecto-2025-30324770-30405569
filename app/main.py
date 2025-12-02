@@ -19,6 +19,7 @@ from app.routers import agenda_router
 from app.routers import cita_router
 from app.routers import episodio_router
 from app.routers import clinico_router  
+from app.routers import auth_router #router de autenticación
 
 # Crea las tablas en la BD si no existen
 Base.metadata.create_all(bind=engine)
@@ -30,6 +31,7 @@ app = FastAPI(
 )
 
 # Registramos las rutas
+app.include_router(auth_router.router)
 app.include_router(usuario_router.router, tags=["Usuarios", "Seguridad"])
 app.include_router(persona_router.router, tags=["PersonasAtendidas", "Identidades"])
 app.include_router(profesional_router.router, tags=["Profesionales", "Identidades"])
