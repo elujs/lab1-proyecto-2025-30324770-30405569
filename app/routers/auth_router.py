@@ -1,8 +1,11 @@
+# app/routers/auth_router.py
+
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm # <-- NUEVO IMPORT NECESARIO
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.usuario import Usuario
-from app.schemas.auth_schema import LoginRequest, Token
+from app.schemas.auth_schema import LoginRequest, Token # Mantener LoginRequest para referencia, aunque ya no se usa directamente
 from app.services.auth_service import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from passlib.context import CryptContext
 from datetime import timedelta
@@ -16,16 +19,17 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 @router.post("/login", response_model=Token)
-def login_for_access_token(request: LoginRequest, db: Session = Depends(get_db)):
-    # 1. Buscar usuario
-    user = db.query(Usuario).filter(Usuario.username == request.username).first()
+# CAMBIO CLAVE: Usa OAuth2PasswordRequestForm para leer los datos del formulario (Form-Data)
+def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    
+    # 1. Buscar usuario (usamos form_data.username)
+    user = db.query(Usuario).filter(Usuario.username == form_data.username).first()
     
     if not user:
-        # Usamos el mismo mensaje de error para evitar ataques de enumeración de usuarios
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
         
-    # 2. Verificar la contraseña hasheada
-    if not verify_password(request.password, user.password_hash):
+    # 2. Verificar la contraseña hasheada (usamos form_data.password)
+    if not verify_password(form_data.password, user.password_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
 
     # 3. Generar el JWT
