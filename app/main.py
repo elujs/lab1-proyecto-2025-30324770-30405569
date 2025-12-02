@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.database import engine, Base
-# Importamos todos los modelos para crear las tablas
+# Importamos  modelos para crear las tablas
 from app.models import usuario 
 from app.models import persona 
 from app.models import profesional
@@ -8,9 +8,9 @@ from app.models import unidad
 from app.models import agenda
 from app.models import cita
 from app.models import episodio 
-from app.models import clinico  #(Notas, Diagnósticos, Consentimientos)
+from app.models import clinico  
 
-# Importamos todos los routers
+# routers
 from app.routers import usuario_router
 from app.routers import persona_router
 from app.routers import profesional_router
@@ -19,7 +19,7 @@ from app.routers import agenda_router
 from app.routers import cita_router
 from app.routers import episodio_router
 from app.routers import clinico_router  
-from app.routers import auth_router #router de autenticación
+from app.routers import auth_router 
 
 # Crea las tablas en la BD si no existen
 Base.metadata.create_all(bind=engine)
@@ -30,7 +30,7 @@ app = FastAPI(
     docs_url="/api_docs"
 )
 
-# Registramos las rutas
+#rutas
 app.include_router(auth_router.router)
 app.include_router(usuario_router.router, tags=["Usuarios", "Seguridad"])
 app.include_router(persona_router.router, tags=["PersonasAtendidas", "Identidades"])

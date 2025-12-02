@@ -8,7 +8,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=124040  # ¡La misma clave que usas en tu .env!
+      - POSTGRES_PASSWORD=124040  
       - POSTGRES_DB=lab1_db
     ports:
       - "5432:5432"

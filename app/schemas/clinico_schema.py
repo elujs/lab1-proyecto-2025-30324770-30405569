@@ -1,11 +1,11 @@
-#En Clinico ira notas clinicas, diagnostico y consentimiento
+
 
 from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 from enum import Enum
 
-# Diagnósticos 
+ 
 class TipoDiagnostico(str, Enum):
     PRESUNTIVO = "presuntivo"
     DEFINITIVO = "definitivo"
@@ -25,7 +25,7 @@ class DiagnosticoResponse(DiagnosticoBase):
     class Config:
         from_attributes = True
 
-# Notas Clínicas 
+
 class NotaBase(BaseModel):
     profesional_id: str
     subjetivo: str
@@ -44,7 +44,6 @@ class NotaResponse(NotaBase):
         from_attributes = True
 
 
-# Consentimiento
 class MetodoConsentimiento(str, Enum):
     DIGITAL = "firma_digital"
     VERBAL = "aceptacion_verbal"

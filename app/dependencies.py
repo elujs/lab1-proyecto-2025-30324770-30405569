@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException, status
 from app.services.auth_service import get_current_user_data
 from app.schemas.auth_schema import TokenData
 
-# --- Definición de Permisos (RBAC) ---
+#  Definición de Permisos 
 
 def requires_admin(user: TokenData = Depends(get_current_user_data)):
     if user.rol != "administracion":
@@ -32,9 +32,9 @@ def requires_identidad_creator(user: TokenData = Depends(get_current_user_data))
         )
     return user
 
-# --- ESTA ES LA FUNCIÓN QUE FALTABA ---
+
 def requires_agendamiento(user: TokenData = Depends(get_current_user_data)):
-    # Quienes pueden dar citas: Cajeros, Admin, y los mismos Profesionales
+   
     if user.rol not in ["administracion", "profesional", "cajero"]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, 
