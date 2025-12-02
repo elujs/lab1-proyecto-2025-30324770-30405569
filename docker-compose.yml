@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=124040  # ¡La misma clave que usas en tu .env!
+      - POSTGRES_DB=lab1_db
+    ports:
+      - "5432:5432"
+
+ 
+  web:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      
+      - DATABASE_URL=postgresql://postgres:124040@db:5432/lab1_db
+      - SECRET_KEY=supersecreto123
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
