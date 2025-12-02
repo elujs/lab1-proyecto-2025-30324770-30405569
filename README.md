@@ -61,3 +61,10 @@ SECRET_KEY=tu_clave_secreta_jwt
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 "
+
+## 🛡️ Pruebas de Calidad (Pytest)
+
+El proyecto incluye pruebas de integración. Para ejecutarlas, detén `uvicorn` y corre el siguiente comando en la raíz del proyecto:
+
+```bash
+python -m pytest
