@@ -30,7 +30,19 @@ def create_cita(cita: CitaCreate, db: Session = Depends(get_db)):
 
     if not agenda:
         raise HTTPException(status_code=400, detail="No hay agenda disponible o cerrada para este horario")
+    
+    cita_existente = db.query(Cita).filter(
+        Cita.profesional_id == cita.profesional_id,
+        Cita.estado != "cancelada", 
+        Cita.fecha_hora_inicio < cita.fecha_hora_fin,
+        Cita.fecha_hora_fin > cita.fecha_hora_inicio
+    ).first()
 
+    if cita_existente:
+        raise HTTPException(
+            status_code=400, 
+            detail="El profesional ya tiene una cita agendada en ese horario (solapamiento detectado)."
+        )
     nueva_cita = Cita(**cita.model_dump())
     db.add(nueva_cita)
     db.commit()
