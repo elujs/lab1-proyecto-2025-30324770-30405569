@@ -1,0 +1,8 @@
+
+## 
+Regla: Un episodio solo puede cerrarse si no existen órdenes en curso.
+Estado: Falta implementar. El código actual permite cambiar el estado a "cerrado" sin verificar órdenes. Como aún no hemos creado el modelo de Ordenes (sección 2.4), esta validación deberá agregarse más adelante.
+## 
+
+
+Sección 2.2: Implementada la creación de bloques de agenda y citas. Falta el historial de cambios de las citas y la lógica de reprogramación (actualmente solo hay cancelación/confirmación).

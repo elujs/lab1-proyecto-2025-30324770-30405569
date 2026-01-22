@@ -17,10 +17,20 @@ Backend en FastAPI conectado a PostgreSQL, gestionado vía Docker
 ##  Cómo ejecutar el proyecto
 
 ### Opción A: Con Docker (Recomendada) 
-Si tienes Docker instalado, solo necesitas ejecutar un comando:
+Si tienes Docker instalado:
 
 ```bash
-docker compose up --build
+##Construir la imagen (solo la primera vez): docker compose up --build
+
+##Detener el programa: docker compose down o control + c
+
+##Ejecutar el programa (segunda vez en adelante): docker compose up
+
+El server se abrira en:
+http://localhost:8000
+con la documentacion en:
+http://localhost:8000/api_docs
+
 
 ## Opción B: Manualmente (Local) 🛠️
 Crear entorno virtual: python -m venv venv
@@ -32,6 +42,11 @@ Crear entorno virtual: python -m venv venv
 ## Configurar el archivo .env con tus credenciales de BD.
 
 ## Ejecutar: uvicorn app.main:app --reload
+
+El server se abrira en:
+http://127.0.0.1:8000
+con la documentacion en:
+http://127.0.0.1:8000/api_docs
 
 
 
@@ -66,5 +81,4 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 El proyecto incluye pruebas de integración. Para ejecutarlas, detén `uvicorn` y corre el siguiente comando en la raíz del proyecto:
 
-```bash
 python -m pytest
