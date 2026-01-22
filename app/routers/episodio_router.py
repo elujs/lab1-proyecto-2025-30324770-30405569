@@ -2,28 +2,24 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.database import get_db
-from app.schemas.unidad_schema import UnidadCreate, UnidadResponse, UnidadUpdate
-from app.dependencies import requires_admin, requires_auth
-from app.services import unidad_service
+from app.schemas.episodio_schema import EpisodioCreate, EpisodioResponse, EpisodioUpdate, EpisodioEstado
+from app.dependencies import requires_clinico, requires_auth
+from app.services import episodio_service 
 
 router = APIRouter()
 
-@router.post("/unidades", response_model=UnidadResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(requires_admin)])
-def create_unidad(unidad: UnidadCreate, db: Session = Depends(get_db)):
-    return unidad_service.create_unidad(db, unidad)
+@router.post("/episodios", response_model=EpisodioResponse, status_code=status.HTTP_201_CREATED, dependencies=[Depends(requires_clinico)])
+def create_episodio(episodio: EpisodioCreate, db: Session = Depends(get_db)):
+    return episodio_service.create_episodio(db, episodio)
 
-@router.get("/unidades/{unidad_id}", response_model=UnidadResponse, dependencies=[Depends(requires_auth)])
-def get_unidad(unidad_id: str, db: Session = Depends(get_db)):
-    return unidad_service.get_unidad(db, unidad_id)
+@router.get("/episodios", response_model=List[EpisodioResponse], dependencies=[Depends(requires_auth)])
+def list_episodios(persona_id: str = None, estado: EpisodioEstado = None, db: Session = Depends(get_db)):
+    return episodio_service.list_episodios(db, persona_id, estado)
 
-@router.get("/unidades", response_model=List[UnidadResponse], dependencies=[Depends(requires_auth)])
-def list_unidades(db: Session = Depends(get_db)):
-    return unidad_service.list_unidades(db)
+@router.get("/episodios/{episodio_id}", response_model=EpisodioResponse, dependencies=[Depends(requires_auth)])
+def get_episodio(episodio_id: str, db: Session = Depends(get_db)):
+    return episodio_service.get_episodio(db, episodio_id)
 
-@router.patch("/unidades/{unidad_id}", response_model=UnidadResponse, dependencies=[Depends(requires_admin)])
-def update_unidad(unidad_id: str, updates: UnidadUpdate, db: Session = Depends(get_db)):
-    return unidad_service.update_unidad(db, unidad_id, updates)
-
-@router.delete("/unidades/{unidad_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(requires_admin)])
-def delete_unidad(unidad_id: str, db: Session = Depends(get_db)):
-    unidad_service.delete_unidad(db, unidad_id)
+@router.patch("/episodios/{episodio_id}", response_model=EpisodioResponse, dependencies=[Depends(requires_clinico)])
+def update_episodio(episodio_id: str, updates: EpisodioUpdate, db: Session = Depends(get_db)):
+    return episodio_service.update_episodio(db, episodio_id, updates)

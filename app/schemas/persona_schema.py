@@ -13,7 +13,7 @@ class PersonaBase(BaseModel):
     sexo: str
     
    
-    correo: EmailStr = None
+    correo: Optional[EmailStr] = None
     telefono: Optional[str] = None
     direccion: Optional[str] = None
     contacto_emergencia: Optional[str] = None
