@@ -1,14 +1,14 @@
 from fastapi import FastAPI
 from app.database import engine, Base
 
-# IMPORTACIÓN DE MODELOS
+#  Importacion de modelos
 from app.models import (
     usuario, persona, profesional, unidad, 
     agenda, cita, episodio, clinico, orden,
     cobertura, facturacion
 )
 
-#IMPORTACIÓN DE ROUTERS 
+# Importacion de routers
 from app.routers import (
     auth_router, usuario_router, persona_router, 
     profesional_router, unidad_router, agenda_router, 
@@ -16,11 +16,13 @@ from app.routers import (
     orden_router, financiero_router
 )
 
-# CREACIÓN DE TABLAS 
+# Conexion y creacion de tablas
+print("--- INTENTANDO CONECTAR A LA BASE DE DATOS ---")
 # Esto crea todas las tablas en PostgreSQL si aún no existen
 Base.metadata.create_all(bind=engine)
+print("--- ¡CONEXIÓN EXITOSA! TABLAS CREADAS ---")
 
-#CONFIGURACIÓN DE LA APP 
+# Configuracion de la App
 app = FastAPI(
     title="API Gestión Médica Integral",
     version="1.0.0",
@@ -28,16 +30,16 @@ app = FastAPI(
     docs_url="/api_docs"
 )
 
-#  REGISTRO DE RUTAS (ROUTERS) 
+# Registro de routers
 
-# Seguridad y Acceso
+# Seguridad y Acceso 
 app.include_router(auth_router.router, tags=["Seguridad"])
-app.include_router(usuario_router.router, prefix="/api/v1", tags=["Usuarios"])
 
 # Identidades (Sección 2.1)
 app.include_router(persona_router.router, prefix="/api/v1", tags=["Personas Atendidas"])
 app.include_router(profesional_router.router, prefix="/api/v1", tags=["Profesionales"])
 app.include_router(unidad_router.router, prefix="/api/v1", tags=["Unidades de Atención"])
+app.include_router(usuario_router.router, prefix="/api/v1", tags=["Usuarios"])
 
 # Agenda y Citas (Sección 2.2)
 app.include_router(agenda_router.router, prefix="/api/v1", tags=["Agendas"])
@@ -51,7 +53,8 @@ app.include_router(orden_router.router, prefix="/api/v1", tags=["Órdenes y Pres
 # Cobertura, Catálogo y Facturación (Secciones 2.5, 2.6 y 2.7)
 app.include_router(financiero_router.router, prefix="/api/v1", tags=["Financiero y Cobertura"])
 
-# ENDPOINTS GENERALES 
+# endpoints generales
+
 @app.get("/", tags=["General"])
 def read_root():
     return {
@@ -62,4 +65,8 @@ def read_root():
 
 @app.get("/health", tags=["Observabilidad"])
 def health_check():
-    return {"status": "ok", "service": "api-gestion-medica"}
+    return {
+        "status": "ok", 
+        "service": "api-gestion-medica",
+        "version": "1.0.0"
+    }
