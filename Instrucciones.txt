@@ -89,20 +89,20 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 ------------------------------------------------------------------------------
 7. EJECUTAR EL SERVIDOR
 ------------------------------------------------------------------------------
-¡Hora de la verdad! Con el entorno activado, ejecuta:
+Ejecuta:
 
    uvicorn app.main:app --reload
 
 Si todo sale bien, verás un mensaje que dice: "Application startup complete".
-Esto significa que la API está viva y conectada a tu base de datos.
+Esto significa que la API conectada a tu base de datos.
 
 ------------------------------------------------------------------------------
-8. CÓMO USAR LA API (DOCUMENTACIÓN)
+8. CÓMO USAR LA API 
 ------------------------------------------------------------------------------
 FastAPI genera una página web automática para probar los endpoints.
 
 1. Abre tu navegador.
-2. Entra a: http://127.0.0.1:8000/docs
+2. Entra a: http://127.0.0.1:8000/docs_Api
 
 Ahí verás los botones verdes y azules para interactuar con la base de datos
 (Crear usuarios, ver pacientes, etc.).
@@ -121,4 +121,4 @@ B) Error "authentication failed" o conexión rechazada:
 
 C) Error con "bcrypt" o "passlib":
    Causa: Conflicto de versiones.
-   Solución: Ejecuta `pip install bcrypt==4.0.1` y reinicia el servidor. (Aunque esto ya debería estar arreglado en el requirements.txt).
+   Solución: Ejecuta `pip install bcrypt==4.0.1` y reinicia el servidor. 

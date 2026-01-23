@@ -6,7 +6,7 @@ from app.schemas.cita_schema import CitaCreate, CitaUpdate
 
 
 def create_cita(db: Session, cita: CitaCreate):
-    # Regla: Debe existir agenda abierta
+    # Debe existir agenda abierta
     agenda = db.query(Agenda).filter(
         Agenda.profesional_id == cita.profesional_id,
         Agenda.estado == "abierto",
@@ -17,7 +17,7 @@ def create_cita(db: Session, cita: CitaCreate):
     if not agenda:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No hay agenda disponible")
     
-    # Regla: Evitar solapamiento (409 Conflict)
+    # Evitar solapamiento 
     overlap = db.query(Cita).filter(
         Cita.profesional_id == cita.profesional_id,
         Cita.estado != "cancelada", 
@@ -39,7 +39,7 @@ def update_cita(db: Session, cita_id: str, updates: CitaUpdate):
     if not cita:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Cita no encontrada")
 
-    # 1. SI HAY REPROGRAMACIÓN (Cambio de fechas)
+    # Reprogramacion
     if updates.fecha_hora_inicio or updates.fecha_hora_fin:
         nueva_fecha_inicio = updates.fecha_hora_inicio or cita.fecha_hora_inicio
         nueva_fecha_fin = updates.fecha_hora_fin or cita.fecha_hora_fin
@@ -67,7 +67,7 @@ def update_cita(db: Session, cita_id: str, updates: CitaUpdate):
         if overlap:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Conflicto: El profesional ya tiene otra cita en ese horario")
 
-    # 2. REGISTRAR EN HISTORIAL (Audit Log)
+    # Registro en historial 
     historial = CitaHistorial(
         cita_id=cita_id,
         estado_anterior=cita.estado,
@@ -78,7 +78,7 @@ def update_cita(db: Session, cita_id: str, updates: CitaUpdate):
     )
     db.add(historial)
 
-    # 3. APLICAR CAMBIOS
+    # Aplicar Cambios
     update_data = updates.model_dump(exclude_unset=True, exclude={"motivo_reprogramacion"})
     for key, value in update_data.items():
         setattr(cita, key, value)
