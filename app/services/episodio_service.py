@@ -3,6 +3,7 @@ from fastapi import HTTPException, status
 from app.models.episodio import EpisodioAtencion
 from app.models.persona import PersonaAtendida
 from app.schemas.episodio_schema import EpisodioCreate, EpisodioUpdate, EpisodioEstado
+from app.models.orden import Orden
 
 def create_episodio(db: Session, episodio: EpisodioCreate):
     # Regla MER: El paciente debe existir
@@ -33,11 +34,20 @@ def get_episodio(db: Session, episodio_id: str):
 def update_episodio(db: Session, episodio_id: str, updates: EpisodioUpdate):
     episodio = get_episodio(db, episodio_id)
     
-    # Regla: "Un episodio solo puede cerrarse si no existen órdenes en curso"
-    # (Nota: Se implementará en la Sección 2.4 al tener el modelo de Órdenes)
-    
-    update_data = updates.model_dump(exclude_unset=True)
-    for key, value in update_data.items():
+    # REGLA RF 6.2: No cerrar si hay órdenes pendientes
+    if updates.estado == "cerrado":
+        ordenes_activas = db.query(Orden).filter(
+            Orden.episodio_id == episodio_id,
+            Orden.estado.in_(["emitida", "autorizada", "enCurso"])
+        ).count()
+        
+        if ordenes_activas > 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, 
+                detail=f"No se puede cerrar: el episodio tiene {ordenes_activas} órdenes en curso."
+            )
+            
+    for key, value in updates.model_dump(exclude_unset=True).items():
         setattr(episodio, key, value)
         
     db.commit()
