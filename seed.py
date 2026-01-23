@@ -78,8 +78,13 @@ def seed_db():
         profe = profe_house 
         print("✅ 2 Profesionales creados (House y Cuddy)")
     else:
-        # Si ya existen, obtenemos uno para continuar la secuencia
+    # Intentamos buscar a House
         profe = db.query(Profesional).filter(Profesional.registro_profesional == "RM-12345").first()
+
+    # CORRECCIÓN: Si House no existe, agarramos el primer médico que encontremos
+    if not profe:
+        profe = db.query(Profesional).first()
+        print(f"⚠️ No se encontró a House, usando al profesional: {profe.nombres} {profe.apellidos}")
 
     # 4. PACIENTE (PERSONA)
     paciente = db.query(PersonaAtendida).first()

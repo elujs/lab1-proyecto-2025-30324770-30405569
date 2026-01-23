@@ -20,6 +20,7 @@ from app.routers import cita_router
 from app.routers import episodio_router
 from app.routers import clinico_router  
 from app.routers import auth_router 
+from app.routers import financiero_router
 
 # Crea las tablas en la BD si no existen
 Base.metadata.create_all(bind=engine)
@@ -40,6 +41,7 @@ app.include_router(agenda_router.router, tags=["Agendas", "Citas"])
 app.include_router(cita_router.router, tags=["Citas"])
 app.include_router(episodio_router.router, tags=["Episodios", "Clínico"])
 app.include_router(clinico_router.router, tags=["Clínico"]) 
+app.include_router(financiero_router.router, tags=["Financiero y Cobertura"])
 @app.get("/")
 
 def read_root():
