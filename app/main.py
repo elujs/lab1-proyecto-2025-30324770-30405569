@@ -26,6 +26,10 @@ from app.routers import (
     orden_router # <-- router de órdenes agregado
 )
 
+
+Base.metadata.create_all(bind=engine)
+print("--- ¡CONEXIÓN EXITOSA! TABLAS CREADAS ---")
+
 # Crear todas las tablas en la base de datos
 Base.metadata.create_all(bind=engine)
 
@@ -34,6 +38,7 @@ app = FastAPI(
     version="0.2.0", 
     docs_url="/api_docs"
 )
+print("--- INTENTANDO CONECTAR A LA BASE DE DATOS ---") 
 
 # --- REGISTRO DE RUTAS ---
 app.include_router(auth_router.router)
@@ -45,9 +50,11 @@ app.include_router(agenda_router.router, tags=["Agendas", "Citas"])
 app.include_router(cita_router.router, tags=["Citas"])
 app.include_router(episodio_router.router, tags=["Episodios", "Clínico"])
 app.include_router(clinico_router.router, tags=["Clínico"]) 
-app.include_router(financiero_router.router, tags=["Financiero y Cobertura"])
 @app.get("/")
+def read_root():
+    return {"mensaje": "¡La API está funcionando y conectada a la BD!"}
 
+app.include_router(financiero_router.router, tags=["Financiero y Cobertura"])
 app.include_router(clinico_router.router, tags=["Registro Clínico"])
 app.include_router(orden_router.router, tags=["Órdenes y Prestaciones"]) 
 @app.get("/", tags=["General"])
