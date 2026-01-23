@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.database import get_db
+from app.models.cita import Cita, CitaHistorial
 from app.schemas.cita_schema import CitaCreate, CitaResponse, CitaUpdate
 from app.dependencies import requires_agendamiento, requires_auth
 from app.services import cita_service
@@ -19,3 +20,8 @@ def get_citas(db: Session = Depends(get_db)):
 @router.patch("/citas/{cita_id}", response_model=CitaResponse, dependencies=[Depends(requires_agendamiento)])
 def update_cita(cita_id: str, updates: CitaUpdate, db: Session = Depends(get_db)):
     return cita_service.update_cita(db, cita_id, updates)
+
+@router.get("/citas/{cita_id}/historial", dependencies=[Depends(requires_auth)])
+def get_cita_historial(cita_id: str, db: Session = Depends(get_db)):
+    historial = db.query(CitaHistorial).filter(CitaHistorial.cita_id == cita_id).all()
+    return historial
