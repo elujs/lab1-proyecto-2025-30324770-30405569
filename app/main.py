@@ -1,6 +1,17 @@
 from fastapi import FastAPI
 from app.database import engine, Base
 
+# routers
+from app.routers import usuario_router
+from app.routers import persona_router
+from app.routers import profesional_router
+from app.routers import unidad_router 
+from app.routers import agenda_router
+from app.routers import cita_router
+from app.routers import episodio_router
+from app.routers import clinico_router  
+from app.routers import auth_router 
+from app.routers import financiero_router
 # Importacion de modelos
 from app.models import (
     usuario, persona, profesional, unidad, 
@@ -33,6 +44,10 @@ app.include_router(unidad_router.router, tags=["Unidades de Atención", "Identid
 app.include_router(agenda_router.router, tags=["Agendas", "Citas"])
 app.include_router(cita_router.router, tags=["Citas"])
 app.include_router(episodio_router.router, tags=["Episodios", "Clínico"])
+app.include_router(clinico_router.router, tags=["Clínico"]) 
+app.include_router(financiero_router.router, tags=["Financiero y Cobertura"])
+@app.get("/")
+
 app.include_router(clinico_router.router, tags=["Registro Clínico"])
 app.include_router(orden_router.router, tags=["Órdenes y Prestaciones"]) 
 @app.get("/", tags=["General"])
