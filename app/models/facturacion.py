@@ -7,6 +7,7 @@ import uuid
 
 class Prestacion(Base):
     __tablename__ = "prestaciones"
+    codigo = Column(String, primary_key=True)
     nombre = Column(String, nullable=False)
     grupo = Column(String) 
     tiempo_estimado = Column(Integer) 
